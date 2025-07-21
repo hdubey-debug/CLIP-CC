@@ -3,10 +3,13 @@ import json
 import subprocess
 from yt_dlp import YoutubeDL
 
+def _get_default_metadata_path():
+    """
+    Returns the internal metadata.jsonl path included in the package.
+    """
+    return os.path.join(os.path.dirname(__file__), "..", "metadata", "metadata.jsonl")
+
 def download_video(url, output_path, cookiefile_path=None):
-    """
-    Download a YouTube video using yt-dlp.
-    """
     ydl_opts = {
         'outtmpl': output_path,
         'quiet': True,
@@ -19,9 +22,6 @@ def download_video(url, output_path, cookiefile_path=None):
         ydl.download([url])
 
 def clip_video_ffmpeg(input_path, output_path, duration=90):
-    """
-    Clip a video to a specific duration using FFmpeg.
-    """
     command = [
         'ffmpeg',
         '-y',
@@ -36,19 +36,26 @@ def clip_video_ffmpeg(input_path, output_path, duration=90):
         print(f"❌ Failed to clip {input_path}: {e}")
         raise
 
-def download_and_clip_from_jsonl(jsonl_path, output_dir, target_ids=None, cookiefile_path=None):
+def download_and_clip_dataset(
+    output_dir,
+    target_ids=None,
+    cookiefile_path=None,
+    clip_duration=90
+):
     """
-    Download and clip videos based on a JSONL metadata file.
-    
+    Downloads and clips videos from the internal metadata file.
+
     Args:
-        jsonl_path: Path to metadata.jsonl
-        output_dir: Directory where final clips will be saved
-        target_ids: Set of video IDs to process (optional)
-        cookiefile_path: Optional path to YouTube cookies file
+        output_dir: Temp folder to save raw downloaded videos
+        target_ids: Optional set of video IDs to filter
+        cookiefile_path: Optional path to YouTube cookies
+        clip_duration: Duration in seconds (default: 90)
     """
+    jsonl_path = _get_default_metadata_path()
     os.makedirs(output_dir, exist_ok=True)
     temp_dir = os.path.join(output_dir, "temp_raw")
     os.makedirs(temp_dir, exist_ok=True)
+
 
     with open(jsonl_path, "r", encoding="utf-8") as f:
         for line in f:
@@ -65,11 +72,14 @@ def download_and_clip_from_jsonl(jsonl_path, output_dir, target_ids=None, cookie
             print(f"⬇️ Downloading {video_id}...")
             try:
                 download_video(url, temp_path, cookiefile_path=cookiefile_path)
-                print(f"✂️ Clipping {video_id} to 90 seconds using FFmpeg...")
-                clip_video_ffmpeg(temp_path, final_path, duration=90)
+                print(f"✂️ Clipping {video_id} to {clip_duration} seconds...")
+                clip_video_ffmpeg(temp_path, final_path, duration=clip_duration)
                 print(f"✅ Saved: {final_path}")
             except Exception as e:
                 print(f"⚠️ Error processing {video_id}: {e}")
             finally:
                 if os.path.exists(temp_path):
                     os.remove(temp_path)
+    
+    if os.path.exists(temp_dir):
+        os.removedirs(temp_dir)
