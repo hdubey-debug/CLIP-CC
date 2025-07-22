@@ -116,14 +116,3 @@ This:
 
 ---
 
-## 📜 License
-
-Specify your license here (e.g., MIT, Apache 2.0).
-
----
-
-## 👤 Author
-
-**Your Name**  
-Email: you@example.com  
-GitHub: [@yourusername](https://github.com/yourusername)
