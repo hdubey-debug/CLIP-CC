@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="clip-cc-dataset",
+    name="Clip-CC",
     version="0.1.0",
     description="CLIP-CC: YouTube summary dataset with optional download/clip helper",
     author="Sugam Mishra",

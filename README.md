@@ -1,6 +1,6 @@
-# 📼 clip-cc-dataset
+# 📼 Clip-cc
 
-The `clip-cc-dataset` is a lightweight Python package for accessing and optionally downloading the **CLIP-CC** dataset — a curated collection of **200 YouTube video links with human-written summaries**, intended for research and experimentation in multimodal AI tasks like video comprehension, summarization, and representation learning.
+The `Clip-CC` is a lightweight Python package for accessing and optionally downloading the **CLIP-CC** dataset — a curated collection of **200 YouTube video links with human-written summaries**, intended for research and experimentation in multimodal AI tasks like video comprehension, summarization, and representation learning.
 
 ## 📂 Dataset Contents
 
@@ -82,7 +82,7 @@ print(data[0])
 ### ⬇️ Download & Clip Videos (Optional)
 
 ```python
-from clip_cc_dataset.downloader import download_and_clip_dataset
+from clip_cc.downloader import download_and_clip_dataset
 
 download_and_clip_dataset(
     output_dir="downloads/temp",        # raw download location
