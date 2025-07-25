@@ -12,7 +12,9 @@ setup(
         "yt-dlp",
         "ffmpeg-python"
     ],
-    package_data={"clip_cc_dataset": ["../metadata/metadata.jsonl"]},
+    package_data={
+        "clip_cc": ["data/metadata.jsonl"],
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
     ],

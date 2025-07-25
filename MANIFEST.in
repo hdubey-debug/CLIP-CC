@@ -1,0 +1,4 @@
+include metadata/metadata.jsonl
+recursive-include metadata *.jsonl
+include clip_cc/data/metadata.jsonl
+recursive-include clip_cc/data *.jsonl
